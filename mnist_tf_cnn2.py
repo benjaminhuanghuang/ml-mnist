@@ -1,5 +1,9 @@
 '''
 https://blog.csdn.net/briblue/article/details/80398369
+
+Using 4 layers CNN as modal
+    Input -> conv -> relu -> pool -> fc -> output
+
 '''
 
 # coding:utf-8
@@ -9,8 +13,9 @@ import tensorflow as tf
 
 mnist = input_data.read_data_sets("MNIST_data",one_hot=True)
 
-
+# None　代表图片数量未知
 input = tf.placeholder(tf.float32,[None,784])
+# 将input 重新调整结构，适用于CNN的特征提取
 input_image = tf.reshape(input,[-1,28,28,1])
 
 y = tf.placeholder(tf.float32,[None,10])
