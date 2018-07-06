@@ -44,6 +44,7 @@ print(mnist.train.labels.shape)
 # Get second image
 image = mnist.train.images[1,:]
 image = image.reshape(28,28)
+print("Lable of second image")
 print(mnist.train.labels[1]) # [0. 0. 0. 1. 0. 0. 0. 0. 0. 0.] one-hot style, means value 3
 
 import matplotlib
