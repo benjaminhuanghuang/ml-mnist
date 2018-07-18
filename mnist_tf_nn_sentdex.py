@@ -32,3 +32,38 @@ def neural_network_model(data):
 
     hidden_3_layer = {'weidhts': tf.Variable(tf.random_normal([n_nodes_hl3, n_nodes_hl3]))
                       'biases': tf.Variable(tf.random_normal(n_nodes_hl3)}
+
+    output_layer = {'weidhts': tf.Variable(tf.random_normal([n_nodes_hl3, n_classes]))
+                      'biases': tf.Variable(tf.random_normal(n_classes)}
+
+    l1 = tf.add(tf.matmul(data, hidden_1_layer['weights']) + hidden_1_layer['biases'])
+    l1 = tf.nn.relu(l1)   # activation function
+
+    l2 = tf.add(tf.matmul(l1, hidden_2_layer['weights']) + hidden_2_layer['biases'])
+    l2 = tf.nn.relu(l2)   # activation function
+
+    l3 = tf.add(tf.matmul(l2, hidden_3_layer['weights']) + hidden_3_layer['biases'])
+    l3 = tf.nn.relu(l3)   # activation function
+
+    output = tf.matmul(l2, output_layer['weights']) + output_layer['biases'])
+    return output
+
+
+def train_neural_network(x):
+    prediction = neural_network_model(x)
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(prediction, y))
+    optimizer = tf.train.AdamOptimizer().minimize(cost)
+    # cycles feed forward + backprop
+    epochs = 10
+    whith tf.Session() as sess:
+        sess.run(tf.initialize_all_variables())
+        for epoch in epochs:
+            epoch_loss = 0
+            for _ in range(int(mnist.train.num_examples) / batch_size):
+                x, y = mnist.train.next_batch(batch_size)
+                _, c = sess.run([optimizer, cost], feed_dict = {x: x, y:y})
+                epoch_loss += c
+            print('Epoch ', epoch, "completed out of", epochs, "loss:", epoch_loss)
+        correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        print("Accuracy:", accuracy.eval({x: mnist.test.image, y:mnist.test.labels}))
